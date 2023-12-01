@@ -7,29 +7,29 @@ namespace aoc_2022.Days.Dec01;
 public class Solver : ISolver
 {
     public string Date { get; } = "Dec01";
-    
+
     public void Solve()
     {
         var testData = ParseInput("test1");
+        var testData2 = ParseInput("test2");
         var inputData = ParseInput("input");
-        
-        var calorieCounter = new CalorieCounter();
-        
-        Console.WriteLine("Part 1: Test: " + calorieCounter.SummarizeCalories(testData,1) + " (24000)");
-        Console.WriteLine("Part 1: " + calorieCounter.SummarizeCalories(inputData,1));
-        
-        Console.WriteLine("Part 2: Test: " + calorieCounter.SummarizeCalories(testData,3) + " (45000)");
-        Console.WriteLine("Part 2: " + calorieCounter.SummarizeCalories(inputData,3));
+
+        var worker = new Calibration();
+
+        Console.WriteLine("Part 1: Test: " + worker.FindDigit(testData, false) + " (142)");
+        Console.WriteLine("Part 1: " + worker.FindDigit(inputData, false));
+
+        Console.WriteLine("Part 2: Test: " + worker.FindDigit(testData2, true) + " (281)");
+        Console.WriteLine("Part 2: " + worker.FindDigit(inputData, true));
     }
 
     public dynamic ParseInput(string fileName)
     {
         var reader = new InputReader();
 
-        var temp = reader.GetFileContent(Date,fileName);
-        var temp2 = reader.SplitByEmptyRow(temp);
-        var temp3 = reader.SplitListOfStringToListListOfStringByRow(temp2);
-        
-        return temp3;
+        var temp = reader.GetFileContent(Date, fileName);
+        var temp2 = reader.SplitByRow(temp);
+
+        return temp2;
     }
 }
