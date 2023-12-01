@@ -1,0 +1,47 @@
+row
+^
+|
+|
+*-------> col
+
+from point row, col
+
+Below
+for (int r = row + 1; r < matrix.Count; r++)
+    [r][col]
+
+Above 
+for (int r = row - 1; r >= 0; r--) 
+    [r][col]
+
+Right
+for (int c = col + 1; c < matrix.Count; c++)
+    [row][c]
+
+Left 
+for (int c = col - 1; c >= 0; c--)
+    [row][c]
+
+BelowRight
+ int i = 1;
+ while (row + i < matrix.Count && col + i < matrix.First().Count)
+    [row + i][col + i]
+    i++
+
+BelowLeft
+int i = 1;
+while (row + i < matrix.Count && col - i >= 0)
+    [row + i][col - i]
+    i++
+
+AboveRight
+int i = 1;
+while (row - i >= 0 && col + i < WaitingAreaSeats.First().Count)
+    [row - i][col + i]
+    i++
+
+AboveLeft
+int i = 1;
+while (row - i >= 0 && col - i >= 0)
+    [row - i][col - i]
+    i++

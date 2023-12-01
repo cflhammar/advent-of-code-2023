@@ -1,0 +1,12 @@
+.idea/*
+.idea/
+*.idea/*
+*.idea/
+.DS_Store
+obj
+obj/
+bin
+bin/
+Days/Dec12Year21/
+**/InputData/*.txt
+!**/InputData/test1.txt
