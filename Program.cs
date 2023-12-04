@@ -1,4 +1,4 @@
-﻿using aoc_2022.Days.Dec03;
+﻿using aoc_2022.Days.Dec04;
 
 Solver solver = new Solver();
 
