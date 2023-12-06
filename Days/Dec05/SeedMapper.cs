@@ -1,35 +1,62 @@
-using System.Text.RegularExpressions;
-
 namespace aoc_2022.Days.Dec05;
 
 public class SeedMapper
 {
-    private List<long> _seeds;
+    private List<long> _seeds = new();
     private readonly List<List<(long destStart,long sourceStart,long range)>> _mappers = new();
-
+    // private Dictionary<string, int> _memory = new();
+ 
     public SeedMapper(List<List<string>> input)
     {
         ParseInput(input);
     }
 
-    public void MapLayers()
+    public long MapSeedsAsRangesThroughAllLayers()
     {
-        for (int layerNumber = 0; layerNumber < _mappers.Count; layerNumber++)
+        var min = long.MaxValue;
+        for (int seedNumber = 0; seedNumber < _seeds.Count; seedNumber++)
         {
-            MapAllNumbersThroughLayer(layerNumber);
+            var seed = _seeds[seedNumber];
+            var result = MapThroughAllLayers(seed);
+            if (result < min) min = result;
         }
-        Console.WriteLine(_seeds.Min());
+        
+        return min;
+    }
+    
+    public long MapSeedsThroughAllLayers()
+    {
+        var min = long.MaxValue;
+        for (int seedNumber = 0; seedNumber < _seeds.Count; seedNumber++)
+        {
+            var rangeStart = _seeds[seedNumber];
+            var range = _seeds[seedNumber + 1];
+            for (long n = rangeStart; n < rangeStart + range; n++)
+            {
+                var result = MapThroughAllLayers(n);
+                if (result < min) min = result;   
+            }
+
+            seedNumber++;
+        }
+        
+        return min;
     }
 
-    private void MapAllNumbersThroughLayer(int layerNumber)
+    private long MapThroughAllLayers(long seed)
     {
-        var mappedNumbers = new List<long>();
-        foreach (var number in _seeds)
+        var current = seed;
+        for (int layerNumber = 0; layerNumber < _mappers.Count; layerNumber++)
         {
-            mappedNumbers.Add(MapNumber(number, layerNumber));;
+            current = MapAllNumberThroughLayer(current, layerNumber);
         }
 
-        _seeds = mappedNumbers;
+        return current;
+    }
+
+    private long MapAllNumberThroughLayer(long current,int layerNumber)
+    {
+        return MapNumber(current, layerNumber);
     }
 
     private long MapNumber(long number, int layerNumber)

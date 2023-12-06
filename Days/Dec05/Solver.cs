@@ -13,10 +13,13 @@ public class Solver : ISolver
         var testInput = ParseInput("test1");
         var input = ParseInput("input");
 
+        var smTest = new SeedMapper(testInput);
+        Console.WriteLine(smTest.MapSeedsThroughAllLayers());
+        Console.WriteLine(smTest.MapSeedsAsRangesThroughAllLayers());
+
         var sm = new SeedMapper(input);
-        sm.MapLayers();
-        
-        Console.WriteLine();
+        Console.WriteLine(sm.MapSeedsThroughAllLayers());
+        Console.WriteLine(sm.MapSeedsAsRangesThroughAllLayers()); // takes some minutes, 
     }
 
     public dynamic ParseInput(string fileName)
