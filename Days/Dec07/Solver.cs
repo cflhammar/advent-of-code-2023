@@ -1,4 +1,3 @@
-using System;
 using aoc_2022.Helpers;
 
 namespace aoc_2022.Days.Dec07;
@@ -15,6 +14,10 @@ public class Solver : ISolver
         var cc = new CamelCard();
         Console.WriteLine("Part 1: Test:  " + cc.CalculateWinnings(testInput) + " (6440)");
         Console.WriteLine("Part 1: " + cc.CalculateWinnings(input));
+        
+        var ccwj = new CamelCardWithJoker();
+        Console.WriteLine("Part 2: Test:  " + ccwj.CalculateWinnings(testInput) + " (5905)");
+        Console.WriteLine("Part 2: " + ccwj.CalculateWinnings(input));
     }
 
     public dynamic ParseInput(string fileName)
