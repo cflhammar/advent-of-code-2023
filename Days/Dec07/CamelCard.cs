@@ -2,6 +2,8 @@ namespace aoc_2022.Days.Dec07;
 
 public class CamelCard
 {
+    private readonly long _weight = 100000000000000;
+
     public int CalculateWinnings(List<List<string>> handsAndBets)
     {
         var winnings = 0;
@@ -68,9 +70,7 @@ public class CamelCard
             case 'T': return 10;
         }
 
-        Console.WriteLine("Something is wrong!");
-        return -1;
-
+        throw new Exception("Something is wrong!");
     }
 
 
@@ -80,7 +80,7 @@ public class CamelCard
         var ordered = groups.OrderByDescending(s => s.Count());
         if (ordered.First().Count() == 3 && ordered.ElementAt(1).Count() == 2)
         {
-            return 35000000000;
+            return (long)(3.5 * _weight) ;
         }
 
         return null;
@@ -92,7 +92,7 @@ public class CamelCard
         var ordered = groups.OrderByDescending(s => s.Count());
         if (ordered.First().Count() == 2 && ordered.ElementAt(1).Count() == 2)
         {
-            return 25000000000;
+            return (long)(2.5 * _weight) ;
         }
 
         return null;
@@ -102,7 +102,7 @@ public class CamelCard
     {
         var groups = cards.GroupBy(i => i);
         var maxLen = groups.OrderByDescending(s => s.Count()).First().Count();
-        if (maxLen == x) return x*10000000000;
+        if (maxLen == x) return x*_weight;
         return null;
     }
 }

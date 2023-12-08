@@ -8,10 +8,10 @@ public class MapReader
     private readonly Dictionary<string, (string left, string right)> _map = new();
     private readonly List<char> _directions;
     private int _directionCounter = -1;
-    private List<string> _current = new();
-    private Dictionary<int, long> _cycles = new();
+    private readonly List<string> _current = new();
+    private readonly Dictionary<int, long> _cycles = new();
     private long _steps;
-    private bool _ghostMode;
+    private readonly bool _ghostMode;
 
     public MapReader(List<List<string>> input, bool ghostMode)
     {
@@ -24,6 +24,7 @@ public class MapReader
 
         _directions = input[0][0].ToList();
 
+        // Add starting nodes to current state
         if (ghostMode)
         {
             foreach (var node in _map)
@@ -39,6 +40,7 @@ public class MapReader
 
     public long Navigate()
     {
+        // loop until all parallel ghosts have found a end 
         while (_cycles.Count != _current.Count)
         {
             TakeNextStep();
@@ -53,6 +55,7 @@ public class MapReader
         _steps++;
         switch (direction)
         {
+            // move each ghost to new node and update current state
             case 'R':
                 for (int i = 0; i < _current.Count(); i++)
                 {
