@@ -26,12 +26,12 @@ public class OasisPredictor
 
         for (int i = allDiffs.Count-2; i >= 0; i--)
         {
-            var before = allDiffs[i].Last();
+            var after = allDiffs[i].First();
             var under = allDiffs[i + 1].Last();
-            allDiffs[i].Add(before + under);
+            allDiffs[i].Insert(0,after - under);
         }
 
-        var predictedValue = series.Last() + allDiffs.First().Last(); 
+        var predictedValue = series.First() - allDiffs.First().First(); 
         
         return predictedValue;
     }
