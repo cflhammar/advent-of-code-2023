@@ -2,18 +2,20 @@ namespace aoc_2022.Days.Dec09;
 
 public class OasisPredictor
 {
-    public int FindOasisSum(List<List<string>> input)
+    public (int sumNext, int sumBefore) FindOasisSum(List<List<string>> input)
     {
-        var sum = 0;
+        var sumNext = 0;
+        var sumBefore = 0;
         foreach (var series in input)
         {
-            sum += PredictNextValue(series.Select(int.Parse).ToList());
+            sumNext += PredictNextValue(series.Select(int.Parse).ToList()).predictedNextValue;
+            sumBefore += PredictNextValue(series.Select(int.Parse).ToList()).predictedBeforeValue;
         }
         
-        return sum;
+        return (sumNext, sumBefore) ;
     }
 
-    private int PredictNextValue(List<int> series)
+    private (int predictedNextValue, int predictedBeforeValue) PredictNextValue(List<int> series)
     {
         var allDiffs = new List<List<int>>();
         var diff = series;
@@ -26,14 +28,15 @@ public class OasisPredictor
 
         for (int i = allDiffs.Count-2; i >= 0; i--)
         {
-            var after = allDiffs[i].First();
-            var under = allDiffs[i + 1].Last();
-            allDiffs[i].Insert(0,after - under);
+            allDiffs[i].Add(allDiffs[i].Last() - allDiffs[i + 1].Last());
+            allDiffs[i].Insert(0,allDiffs[i].First() - allDiffs[i + 1].First());
         }
 
-        var predictedValue = series.First() - allDiffs.First().First(); 
+        var predictedNextValue = series.Last() + allDiffs.First().Last(); 
+        var predictedBeforeValue = series.First() - allDiffs.First().First(); 
+
         
-        return predictedValue;
+        return (predictedNextValue, predictedBeforeValue);
     }
 
     private List<int> GetDiff(List<int> series)

@@ -9,4 +9,4 @@ bin
 bin/
 Days/Dec12Year21/
 **/InputData/*.txt
-!**/InputData/test1.txt
+!**/InputData/test2.txt
