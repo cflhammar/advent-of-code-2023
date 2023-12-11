@@ -1,8 +1,8 @@
 namespace aoc_2022.Helpers;
 
-public class MatrixOperations
+public abstract class MatrixOperations
 {
-    public List<List<T>> Rotate90<T>(List<List<T>> input)
+    public static List<List<T>> Rotate90<T>(List<List<T>> input)
     {
         var rotated = new List<List<T>>();
         for (int i = 0; i < input[0].Count; i++)
