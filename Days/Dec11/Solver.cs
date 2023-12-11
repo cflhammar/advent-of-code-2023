@@ -11,13 +11,18 @@ public class Solver : ISolver
     {
         var testInput = ParseInput("test1");
         var input = ParseInput("input");
-
-        var oa = new ObservatoryAnalysis(testInput);
-        oa = new ObservatoryAnalysis(input);
-
         
+        var oa = new ObservatoryAnalysis(testInput,2);
+        Console.WriteLine("Part 1: Test: " + oa.SumDistancesBetweenAllPoints() + " (374)");
         
-        Console.WriteLine();
+        oa = new ObservatoryAnalysis(input,2);
+        Console.WriteLine("Part 1: " + oa.SumDistancesBetweenAllPoints());
+        
+        oa = new ObservatoryAnalysis(testInput,100);
+        Console.WriteLine("Part 2: Test: " + oa.SumDistancesBetweenAllPoints() + " (8410)");
+        
+        oa = new ObservatoryAnalysis(input,1000000);
+        Console.WriteLine("Part 2: " + oa.SumDistancesBetweenAllPoints());
     }
 
     public dynamic ParseInput(string fileName)

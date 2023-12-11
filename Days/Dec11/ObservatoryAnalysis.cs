@@ -2,42 +2,85 @@ namespace aoc_2022.Days.Dec11;
 
 public class ObservatoryAnalysis
 {
-    private List<List<char>> _map;
+    private readonly List<List<char>> _map;
     private List<(int r, int c)> _satellites = new();
 
-    public ObservatoryAnalysis(List<List<char>> map)
+    public ObservatoryAnalysis(List<List<char>> map, int size)
     {
-        _map = AddExtraRowForEachEmptyRow(map);
-        _map = Helpers.MatrixOperations.Rotate90(_map);
-        _map = AddExtraRowForEachEmptyRow(_map);
-        _map = Helpers.MatrixOperations.Rotate90(_map);
-        _map = Helpers.MatrixOperations.Rotate90(_map);
-        _map = Helpers.MatrixOperations.Rotate90(_map);
+        _map = map;
+        size -= 1;
         AssignSatellites();
-        PrintMap();
-        SumDistancesBetweenAllPoints();
+        EnlargeSpaceBetweenSatelliteRowsByFactor(size);
+        EnlargeSpaceBetweenSatelliteColumnsByFactor(size);
     }
-    
-    public void SumDistancesBetweenAllPoints()
+
+    public long SumDistancesBetweenAllPoints()
     {
-        var sum = 0;
+        long sum = 0;
         for (int i = 0; i < _satellites.Count; i++)
         {
             var satellite = _satellites[i];
             for (int j = i + 1; j < _satellites.Count; j++)
             {
-                Console.WriteLine(i +"->" +j);
                 var otherSatellite = _satellites[j];
                 sum += CountManhattanDistanceInFromPointToOtherPoint(satellite, otherSatellite);
             }
         }
-        Console.WriteLine(sum);
-        
+
+        return sum;
+    }
+    
+    private int CountManhattanDistanceInFromPointToOtherPoint((int r, int c) point1, (int r, int c) point2)
+    {
+        return Math.Abs(point1.r - point2.r) + Math.Abs(point1.c - point2.c);
+    }
+    
+    private void EnlargeSpaceBetweenSatelliteColumnsByFactor(int size)
+    {
+        var emptyColumns = new List<int>();
+        var offset = 0;
+        for (int c = _satellites.Min(s => s.c); c < _satellites.Max(s => s.c); c++)
+        {
+            if (_satellites.Select(s => s.c).Contains(c)) continue;
+            emptyColumns.Add(c + offset);
+            offset += size;
+        }
+
+        foreach (var emptyColumn in emptyColumns)
+        {
+            var newSatellites = new List<(int r, int c)>();
+            foreach (var satellite in _satellites)
+            {
+                newSatellites.Add(satellite.c > emptyColumn ? (satellite.r, satellite.c + size) : satellite);
+            }
+            _satellites = newSatellites;
+        }
+    }
+
+    private void EnlargeSpaceBetweenSatelliteRowsByFactor(int size)
+    {
+        var emptyRows = new List<int>();
+        var offset = 0;
+        for (int r = _satellites.Min(s => s.r); r < _satellites.Max(s => s.r); r++)
+        {
+            if (_satellites.Select(s => s.r).Contains(r)) continue;
+            emptyRows.Add(r+offset);
+            offset += size;
+        }
+
+        foreach (var emptyRow in emptyRows)
+        {
+            var newSatellites = new List<(int r, int c)>();
+            foreach (var satellite in _satellites)
+            {
+                newSatellites.Add(satellite.r > emptyRow ? (satellite.r + size, satellite.c) : satellite);
+            }
+            _satellites = newSatellites;
+        }
     }
 
     private void AssignSatellites()
     {
-        var counter = 1;
         for (var r = 0; r < _map.Count; r++)
         {
             var row = _map[r];
@@ -45,36 +88,9 @@ public class ObservatoryAnalysis
             {
                 if (row[c] == '#')
                 {
-                    row[c] = counter.ToString()[0];
                     _satellites.Add((r, c));
-                    counter++;
                 }
             }
-        }
-    }
-    
-    private int CountManhattanDistanceInFromPointToOtherPoint((int r, int c) point1, (int r, int c) point2)
-    {
-        return Math.Abs(point1.r - point2.r) + Math.Abs(point1.c - point2.c);
-    }
-
-    private List<List<char>> AddExtraRowForEachEmptyRow(List<List<char>> map)
-    {
-        var newMap = new List<List<char>>();
-        foreach (var row in map)
-        {
-            if (row.All(e => e == '.')) newMap.Add(map.First().Select(_ => '.').ToList());
-            newMap.Add(row);
-        }
-        return newMap;
-    }
-
-    private void PrintMap()
-    {  Console.WriteLine("-.-.-.-.-.-.-.-.-.-");
-        foreach (var row in _map)
-        {
-            var s = string.Join("", row);
-            Console.WriteLine(s);
         }
     }
 }
