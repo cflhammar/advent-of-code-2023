@@ -2,7 +2,7 @@ namespace aoc_2022.Days.Dec06;
 
 public static class BoatRace
 {
-    private static List<(long raceTime, long record)> _races;
+    private static List<(long raceTime, long record)> _races = new();
     
     public static int RaceAllRaces(List<(long raceTime, long record)> input)
     {
@@ -19,7 +19,7 @@ public static class BoatRace
     private static int Race(int i)
     {
         var setting = _races[i];
-        var winningLoadtimes = new List<int>();
+        var winningLoadTimes = new List<int>();
 
         for (int loadTime = 0; loadTime < setting.raceTime; loadTime++)
         {
@@ -27,8 +27,8 @@ public static class BoatRace
             var dist = goTime * loadTime;
 
             if (dist > setting.record) 
-                winningLoadtimes.Add(loadTime);
+                winningLoadTimes.Add(loadTime);
         }
-        return winningLoadtimes.Count;
+        return winningLoadTimes.Count;
     }
 }

@@ -8,7 +8,7 @@ public class ObservatoryAnalysis
     public ObservatoryAnalysis(List<List<char>> map, int size)
     {
         _map = map;
-        size -= 1;
+        size -= 1;  // we're adding and not multiplying ;)
         AssignSatellites();
         EnlargeSpaceBetweenSatelliteRowsByFactor(size);
         EnlargeSpaceBetweenSatelliteColumnsByFactor(size);

@@ -8,8 +8,9 @@ public class OasisPredictor
         var sumBefore = 0;
         foreach (var series in input)
         {
-            sumNext += PredictNextValue(series.Select(int.Parse).ToList()).predictedNextValue;
-            sumBefore += PredictNextValue(series.Select(int.Parse).ToList()).predictedBeforeValue;
+            var res = PredictNextValue(series.Select(int.Parse).ToList());
+            sumNext += res.predictedNextValue;
+            sumBefore += res.predictedBeforeValue;
         }
         
         return (sumNext, sumBefore) ;
@@ -28,14 +29,13 @@ public class OasisPredictor
 
         for (int i = allDiffs.Count-2; i >= 0; i--)
         {
-            allDiffs[i].Add(allDiffs[i].Last() - allDiffs[i + 1].Last());
+            allDiffs[i].Add(allDiffs[i].Last() + allDiffs[i + 1].Last());
             allDiffs[i].Insert(0,allDiffs[i].First() - allDiffs[i + 1].First());
         }
 
         var predictedNextValue = series.Last() + allDiffs.First().Last(); 
         var predictedBeforeValue = series.First() - allDiffs.First().First(); 
 
-        
         return (predictedNextValue, predictedBeforeValue);
     }
 

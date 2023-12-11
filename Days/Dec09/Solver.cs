@@ -1,4 +1,3 @@
-using System;
 using aoc_2022.Helpers;
 
 namespace aoc_2022.Days.Dec09;
@@ -13,10 +12,14 @@ public class Solver : ISolver
         var input = ParseInput("input");
 
         var op = new OasisPredictor();
+        var test = op.FindOasisSum(testInput);
+        var ans = op.FindOasisSum(input);
 
-        Console.WriteLine(op.FindOasisSum(testInput));
-        Console.WriteLine(op.FindOasisSum(input));
-
+        Console.WriteLine("Part 1: Test: " + test.Item1 + " (114)");
+        Console.WriteLine("Part 1: " + ans.Item1);
+        
+        Console.WriteLine("Part 2: Test: " + test.Item2 + " (2)");
+        Console.WriteLine("Part 2: " + ans.Item2);
     }
 
     public dynamic ParseInput(string fileName)
