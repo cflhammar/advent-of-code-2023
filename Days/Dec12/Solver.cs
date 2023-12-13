@@ -10,11 +10,11 @@ public class Solver : ISolver
     public void Solve()
     {
         var testInput = ParseInput("test1");
-        //var input = ParseInput("input");
+        var input = ParseInput("input");
 
         var ds = new DamagedSprings();
-        ds.FindCombinationsForAllSprings(testInput);
-        Console.WriteLine();
+        Console.WriteLine("Part 1: Test: " + ds.FindCombinationsForAllSprings(testInput) + " (21)");
+        Console.WriteLine("Part 1: " + ds.FindCombinationsForAllSprings(input));
     }
 
     public dynamic ParseInput(string fileName)
