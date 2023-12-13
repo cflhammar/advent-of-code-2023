@@ -32,7 +32,7 @@ public class DamagedSprings
         for(int i=0; i < numberOfCombinations; i++)
         {
             string binary = Convert.ToString(i, 2);
-            string leading_zeroes = "000000000000000000".Substring(0,length-binary.Length);
+            string leading_zeroes = "0000000000000000000000000000000000000000000000000000000000000000000000000".Substring(0,length-binary.Length);
             string final = leading_zeroes + binary;
             binaryCombinations.Add(final);
         }
@@ -84,5 +84,16 @@ public class DamagedSprings
         }
 
         return true;
+    }
+
+    public int FindTripleCombinationsForAllSprings(List<List<string>> input)
+    {
+        foreach (var row in input)
+        {  
+            row[0] = row[0] + "?" + row[0]  + "?" + row[0] + "?" + row[0] + "?" + row[0];
+            row[1] = row[1] + "," + row[1]  + "," + row[1] + "," + row[1] + "," + row[1];
+        }
+
+        return FindCombinationsForAllSprings(input);
     }
 }

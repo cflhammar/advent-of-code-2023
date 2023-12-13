@@ -13,8 +13,11 @@ public class Solver : ISolver
         var input = ParseInput("input");
 
         var ds = new DamagedSprings();
-        Console.WriteLine("Part 1: Test: " + ds.FindCombinationsForAllSprings(testInput) + " (21)");
-        Console.WriteLine("Part 1: " + ds.FindCombinationsForAllSprings(input));
+        // Console.WriteLine("Part 1: Test: " + ds.FindCombinationsForAllSprings(testInput) + " (21)");
+        // Console.WriteLine("Part 1: " + ds.FindCombinationsForAllSprings(input));
+        
+        Console.WriteLine("Part 2: Test: " + ds.FindTripleCombinationsForAllSprings(testInput) + " ()");
+        // Console.WriteLine("Part 2: " + ds.FindTripleCombinationsForAllSprings(input));
     }
 
     public dynamic ParseInput(string fileName)
