@@ -31,9 +31,8 @@ public class MirrorAligner
         return (totalSum, totalSum2);
     }
 
-    private int FindAndCalculateReflectionWithSmudge(List<List<char>> mirror, int row, int col)
+    private int FindAndCalculateReflectionWithSmudge(List<List<char>> mirror, int previousReflectionRow, int previousReflectionColumn)
     {
-        var next = false;
         for (int r = 0; r < mirror.Count; r++)
         {
             for (int c = 0; c < mirror[r].Count(); c++)
@@ -41,19 +40,14 @@ public class MirrorAligner
                 var copyOfMirror = mirror.Select(x => x.ToList()).ToList();
                 copyOfMirror[r][c] = copyOfMirror[r][c] == '#' ? '.' : '#';
 
-                var row2 = FindRowReflection(copyOfMirror, row);
-                var col2 = FindColReflection(copyOfMirror, col);
-                    
-                if (row2 > 0 && row2 != row)
+                var row = FindRowReflection(copyOfMirror, previousReflectionRow);
+                var col = FindColReflection(copyOfMirror, previousReflectionColumn);
+                
+                if (row > -1 || col >  -1)
                 {
-                    return row2 * 100;
-                }
-                if (col2 > 0 && col2 != col)
-                {
-                    return col2;
+                    return row > -1 ? row * 100 : col;
                 }
             }
-            if (next) break;
         }
 
         return -1;

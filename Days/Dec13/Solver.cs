@@ -1,4 +1,3 @@
-using System;
 using aoc_2022.Helpers;
 
 namespace aoc_2022.Days.Dec13;
@@ -11,10 +10,18 @@ public class Solver : ISolver
     {
         var testInput = ParseInput("test1");
         var input = ParseInput("input");
-        var ma = new MirrorAligner(input);
         
+        var ma = new MirrorAligner(testInput);
+        var testResult = ma.FindAndCalculateReflections();
         
-        Console.WriteLine(ma.FindAndCalculateReflections().part2);
+        ma = new MirrorAligner(input);
+        var result = ma.FindAndCalculateReflections();
+        
+        Console.WriteLine("Part 1: Test : " + testResult.part1 + " (405)");
+        Console.WriteLine("Part 1: " + result.part1);
+        
+        Console.WriteLine("Part 2: Test : " + testResult.part2 + " (400)");
+        Console.WriteLine("Part 2: " + result.part2);
     }
 
     public dynamic ParseInput(string fileName)
