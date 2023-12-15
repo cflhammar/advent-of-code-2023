@@ -12,12 +12,12 @@ public class Solver : ISolver
         var testInput = ParseInput("test1");
         var input = ParseInput("input");
 
-        var ds = new DamagedSprings();
-        // Console.WriteLine("Part 1: Test: " + ds.FindCombinationsForAllSprings(testInput) + " (21)");
-        // Console.WriteLine("Part 1: " + ds.FindCombinationsForAllSprings(input));
+        var ds = new DamagedSpringsFinder();
+        Console.WriteLine("Part 1: Test: " + ds.SumCombinations(testInput) + " (21)");
+        Console.WriteLine("Part 1: " + ds.SumCombinations(input));
         
-        Console.WriteLine("Part 2: Test: " + ds.FindTripleCombinationsForAllSprings(testInput) + " ()");
-        // Console.WriteLine("Part 2: " + ds.FindTripleCombinationsForAllSprings(input));
+        Console.WriteLine("Part 2: Test: " + ds.SumCombinationsTimesFive(testInput) + " (525152)");
+        Console.WriteLine("Part 2: " + ds.SumCombinationsTimesFive(input));
     }
 
     public dynamic ParseInput(string fileName)
