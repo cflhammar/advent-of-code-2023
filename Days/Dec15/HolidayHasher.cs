@@ -12,9 +12,9 @@ public class HolidayHasher
         foreach (var instruction in input)
         {
             var data = Regex.Split(instruction, "=|-");
-            var assignment = instruction.Contains("=");
+            var assignment = instruction.Contains('=');
             var lens = data[0];
-            var box = Hash(data[0]);
+            var box = HashValue(data[0]);
             var focalLength = data[1].Length > 0 ? int.Parse(data[1]) : 0;
 
 
@@ -72,13 +72,13 @@ public class HolidayHasher
         var sum = 0;
         foreach (var s in input)
         {
-            sum += Hash(s);
+            sum += HashValue(s);
         }
 
         return sum;
     }
-    
-    public int Hash(string input)
+
+    private int HashValue(string input)
     {
         var current = 0;
         
@@ -94,9 +94,7 @@ public class HolidayHasher
     }
 }
 
-
 public class Box
 {
     public List<(string, int)> Lenses = new();
-
 }
