@@ -28,9 +28,6 @@ public class MirrorMaze
                     {
                         max = count;
                     }
-
-                    _visited.Clear();
-                    _beams.Clear();
                 }
 
                 if (r == _map.Count - 1)
@@ -40,9 +37,6 @@ public class MirrorMaze
                     {
                         max = count;
                     }
-
-                    _visited.Clear();
-                    _beams.Clear();
                 }
 
                 if (c == 0)
@@ -52,9 +46,6 @@ public class MirrorMaze
                     {
                         max = count;
                     }
-
-                    _visited.Clear();
-                    _beams.Clear();
                 }
 
                 if (c == _map[0].Count - 1)
@@ -64,9 +55,6 @@ public class MirrorMaze
                     {
                         max = count;
                     }
-
-                    _visited.Clear();
-                    _beams.Clear();
                 }
             }
         }
@@ -76,6 +64,8 @@ public class MirrorMaze
 
     public int LetThereBeLight(int r, int c, string direction)
     {
+        _visited.Clear();
+        _beams.Clear();
         StartNewBeam(r, c, direction);
         while (_beams.Count > 0)
         {
@@ -201,7 +191,7 @@ public class MirrorMaze
                 break;
         }
 
-        return new List<Beam>() { new Beam(nextPos, beam.Direction) };
+        return new List<Beam>() { beam with { Pos = nextPos } };
     }
 
     private bool IsInRange((int r, int c) nextPos)
