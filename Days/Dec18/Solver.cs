@@ -13,7 +13,10 @@ public class Solver : ISolver
         var input = ParseInput("input");
         
         var digger = new TrenchDigger();
-        Console.WriteLine(digger.Dig(testInput));
+        Console.WriteLine("Part 1: Test: "+ digger.Dig(testInput) + " (62)");
+        Console.WriteLine("Part 1: "+ digger.Dig(testInput, true));
+        Console.WriteLine("Part 2: Test: "+ digger.Dig(input) + " (952408144115)");
+        Console.WriteLine("Part 2: "+ digger.Dig(input, true));
     }
 
     public dynamic ParseInput(string fileName)
