@@ -12,9 +12,14 @@ public class Solver : ISolver
         var testInput = ParseInput("test1");
         var input = ParseInput("input");
         
+        var rulesEngineTest = new RulesEngine(testInput);
         var rulesEngine = new RulesEngine(input);
         
-        Console.WriteLine(rulesEngine.SortAll());
+        Console.WriteLine("Part 1: Test: " + rulesEngineTest.SortAll() + " (19114)");
+        Console.WriteLine("Part 1: " + rulesEngine.SortAll());
+
+        Console.WriteLine("Part 2: Test: " + rulesEngineTest.CalculateCombinations()+ " (167409079868000)");
+        Console.WriteLine("Part 2: " + rulesEngine.CalculateCombinations());
     }
 
     public dynamic ParseInput(string fileName)
