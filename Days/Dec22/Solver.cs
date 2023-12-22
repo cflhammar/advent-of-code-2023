@@ -12,10 +12,14 @@ public class Solver : ISolver
         var testInput = ParseInput("test1");
         var input = ParseInput("input");
         
+        var test = new BlockDisintegrator(testInput);
         var disintegration = new BlockDisintegrator(input);
-        disintegration.FindDisintegrateableBlocks();
         
-        Console.WriteLine();
+        Console.WriteLine("Part 1: Test: " + test.FindSafeBlocks()+ " (5)");
+        Console.WriteLine("Part 2: Test: " + test.DisintegrateAllBlocks()+ " (7)");
+        
+        Console.WriteLine("Part 1: " + disintegration.FindSafeBlocks());
+        Console.WriteLine("Part 2: " + disintegration.DisintegrateAllBlocks());
     }
 
     public dynamic ParseInput(string fileName)

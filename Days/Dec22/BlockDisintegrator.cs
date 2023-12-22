@@ -2,11 +2,11 @@ namespace aoc_2022.Days.Dec22;
 
 public class BlockDisintegrator
 {
-    private List<Block> _blocks;
+    private List<Block> _blocks = new();
+    private readonly List<Block> _safeBlocks = new();
 
     public BlockDisintegrator(List<List<string>> input)
     {
-        _blocks = new List<Block>();
         foreach (var block in input)
         {
             _blocks.Add(new Block(block));
@@ -14,11 +14,44 @@ public class BlockDisintegrator
 
         FallToRest();
     }
-
-
-    public void FindDisintegrateableBlocks()
+    
+    public int DisintegrateAllBlocks()
     {
-        var canBeRemoved = 0;
+        var sum = 0;
+        var remaining = _blocks?.Count;
+        foreach (var block in _blocks!)
+        {
+            remaining--;
+            if (_safeBlocks.Any(b => b.Start == block.Start && b.End == block.End )) continue;
+            sum += DisintegrateBlock(block);
+            Console.WriteLine("I'm slow but done in: " + remaining);
+        }
+
+        return sum;
+    }
+
+    private int DisintegrateBlock(Block block)
+    {
+        var blocksAbove = 
+            _blocks.Where(b => 
+                    b.Start != block.Start && 
+                    b.End != block.End)
+                .ToList().OrderBy(b => b.Start.z).ToList();
+
+        var blocksThatFalled = 0;
+        var atRest = new List<Block>();
+        foreach (var aboveBlock in blocksAbove)
+        {
+            var restingPos = FindEmptySpace(aboveBlock, atRest);
+            if (restingPos.Start != aboveBlock.Start && restingPos.End != aboveBlock.End) blocksThatFalled++;
+            atRest.Add(restingPos);
+        }
+
+        return blocksThatFalled;
+    }
+    
+    public int FindSafeBlocks()
+    {
         foreach (var block in _blocks)
         {
             var blocksAboveSupportedByThisBlock = 
@@ -34,12 +67,11 @@ public class BlockDisintegrator
                 hasSupport = false;
             }
             
-            if (hasSupport) canBeRemoved++;
+            if (hasSupport) _safeBlocks.Add(block);
         }
-        Console.WriteLine(canBeRemoved);
+        return _safeBlocks.Count;
     }
-
-
+    
     private void FallToRest()
     {
         _blocks = _blocks.OrderBy(b => b.Start.z).ToList();
