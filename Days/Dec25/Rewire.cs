@@ -6,57 +6,79 @@ public class Rewire
     public int SeparateGroups(List<List<string>> input)
     {
         var groups = ParseInput(input);
-        var allConnections = GetAllConnections(groups);
 
-        for (int i = 0; i < allConnections.Count(); i++)
+        var connectionsCounter = new Dictionary<string, int>();
+        for (int i = 0; i < 500; i++)
         {
-            for (int j = i + 1; j < allConnections.Count(); j++)
+            var r = new Random();
+            var rand = r.Next(0, groups.Count);
+            var start = groups.ElementAt(rand).Key;
+            rand = r.Next(0, groups.Count);
+            var end = groups.ElementAt(rand).Key;
+            
+            var visited = GoFromGroupToGroup(start,end, groups);
+
+            for (int j = 1; j < visited.Count; j++)
             {
-                for (int k = j + 1; k < allConnections.Count(); k++)
+                var connection = visited[j - 1] + "-" + visited[j];
+                var connection2 = visited[j] + "-" + visited[j - 1];
+                
+                if (connectionsCounter.ContainsKey(connection))
                 {
-                    var con1 = allConnections.ElementAt(i);
-                    var con2 = allConnections.ElementAt(j);
-                    var con3 = allConnections.ElementAt(k);
-                    
-                    groups[con1.a].Connections.Remove(con1.b);
-                    groups[con1.b].Connections.Remove(con1.a);
-                    
-                    groups[con2.a].Connections.Remove(con2.b);
-                    groups[con2.b].Connections.Remove(con2.a);
-                    
-                    groups[con3.a].Connections.Remove(con3.b);
-                    groups[con3.b].Connections.Remove(con3.a);
-                    
-                    var numberOfGroupsReached = CanReachNumberOfGroups(groups);
-                    
-                    if (numberOfGroupsReached != groups.Count)
-                    {
-                        Console.WriteLine($"Found it! {con1.a}-{con1.b}, {con2.a}-{con2.b}, {con3.a}-{con3.b}");
-                        return numberOfGroupsReached * (groups.Count - numberOfGroupsReached);
-                    }
-                    else
-                    {
-                        Console.WriteLine($"Did not found it! {con1.a}-{con1.b}, {con2.a}-{con2.b}, {con3.a}-{con3.b}");
-                        
-                    }
-
-                    groups[con1.a].Connections.Add(con1.b);
-                    groups[con1.b].Connections.Add(con1.a);
-                    
-                    groups[con2.a].Connections.Add(con2.b);
-                    groups[con2.b].Connections.Add(con2.a);
-                    
-                    groups[con3.a].Connections.Add(con3.b);
-                    groups[con3.b].Connections.Add(con3.a);
-
+                    connectionsCounter[connection]++;
                 }
+                else if (connectionsCounter.ContainsKey(connection2))
+                {
+                    connectionsCounter[connection2]++;
+                }
+                else
+                {
+                    connectionsCounter.Add(connection, 1);
+                }
+            }
+            
+        }
+
+        var top3 = connectionsCounter.OrderByDescending(e => e.Value).Take(3).Select(kvp => kvp.Key).Select(s => s.Split("-").ToList()).ToList();
+        
+        groups[top3[0][0]].Remove(top3[0][1]);
+        groups[top3[0][1]].Remove(top3[0][0]);
+        
+        groups[top3[1][0]].Remove(top3[1][1]);
+        groups[top3[1][1]].Remove(top3[1][0]);
+        
+        groups[top3[2][0]].Remove(top3[2][1]);
+        groups[top3[2][1]].Remove(top3[2][0]);
+        
+        var numberOfGroupsReached = CanReachNumberOfGroups(groups);
+        return numberOfGroupsReached * (groups.Count - numberOfGroupsReached);
+    }
+
+    private List<string> GoFromGroupToGroup(string groupOne, string groupTwo, Dictionary<string, List<string>> groups)
+    { 
+        var visited = new HashSet<string>();
+        var queue = new Queue<(string group, List<string> visited)>();
+        queue.Enqueue((groupOne, new List<string>()));
+        while (queue.Count > 0)
+        {
+            var current = queue.Dequeue();
+            if (current.group == groupTwo)
+            {
+                return current.visited;
+            }
+            visited.Add(current.group);
+            foreach (var connection in groups[current.group])
+            {
+                if (visited.Contains(connection)) continue;
+                var newVisited = new List<string>(current.visited) { connection };
+                queue.Enqueue((connection, newVisited));
             }
         }
 
-        return -1;
+        throw new Exception();
     }
-
-    private int CanReachNumberOfGroups(Dictionary<string, Group> groups)
+    
+    private static int CanReachNumberOfGroups(Dictionary<string, List<string>> groups)
     { 
         var visited = new HashSet<string>();
         var queue = new Queue<string>();
@@ -66,7 +88,7 @@ public class Rewire
             var current = queue.Dequeue();
             if (visited.Contains(current)) continue;
             visited.Add(current);
-            foreach (var connection in groups[current].Connections)
+            foreach (var connection in groups[current])
             {
                 queue.Enqueue(connection);
             }
@@ -75,59 +97,35 @@ public class Rewire
         return visited.Count;
     }
 
-    private HashSet<(string a, string b)> GetAllConnections(Dictionary<string, Group> groups)
+    private Dictionary<string,List<string>> ParseInput(List<List<string>> input)
     {
-        var allConnections = new HashSet<(string a, string b)>();
-        foreach (var group in groups)
-        {
-            foreach (var connection in group.Value.Connections)
-            {
-                if (allConnections.Contains((group.Key, connection)) ||
-                    allConnections.Contains((connection, group.Key))) continue;
-                allConnections.Add((group.Key, connection));
-            }
-        }
-
-        return allConnections;
-    }
-
-    private Dictionary<string,Group> ParseInput(List<List<string>> input)
-    {
-        var groups = new Dictionary<string, Group>();
+        var groups = new Dictionary<string, List<string>>();
         foreach (var line in input)
         {
             var name = line[0];
             var connections = line[1].Split(" ").ToList();
             if (groups.ContainsKey(name))
             {
-                groups[name].Connections.AddRange(connections);
+                groups[name].AddRange(connections);
             }
             else
             {
-                groups.Add(name, new Group {Name = name, Connections = connections});
+                groups.Add(name, new List<string>(connections));
             }
 
             foreach (var connection in connections)
             {
                 if (groups.ContainsKey(connection))
                 {
-                    groups[connection].Connections.Add(name);
+                    groups[connection].Add(name);
                 }
                 else
                 {
-                    groups.Add(connection, new Group {Name = connection, Connections = new List<string> {name}});
+                    groups.Add(connection, new List<string> {name});
                 }
             }
-            
         }
 
         return groups;
     }
-}
-
-
-public class Group
-{
-    public string Name;
-    public List<string> Connections;
 }
